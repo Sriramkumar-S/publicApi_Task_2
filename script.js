@@ -35,6 +35,9 @@ function createOption(value) {
 const search = document.getElementById('search');
 search.addEventListener('click', () => {
     this.copyOfData = this.initialData.filter((element) => element.family === got.value);
+    if(got.value === '') {
+        this.copyOfData = this.initialData
+    }
     this.displaySearchResults(this.copyOfData)
 })
 function fetchResponse(url) {
