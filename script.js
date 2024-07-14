@@ -2,14 +2,41 @@ const url = "https://thronesapi.com/api/v2/Characters";
 const container_id = document.getElementById('container');
 const row = createDiv('row section');
 const displayData = [];
+let copyOfData = [];
+let initialData = [];
 const responseData = fetchResponse(url).then((data) => {
-    let newData = data.map((el) => el.family)
-    this.displayData = newData;
-    console.log(newData)
-    console.log(data)
+    this.copyOfData = [...data]
+    this.initialData = [...data]
+    let newData = data.map((el) => el.family);
+    addFilterData(newData)
     displaySearchResults(data)
 });
 
+function addFilterData(data) {
+    this.displayData = Array.from(new Set(data))
+    this.displayData.forEach((element, index, self) => {
+        if(element === 'Unknown' || element === 'None' || element === "") {
+            self.splice(index, 1)
+        }
+    });
+    const filter = document.getElementById('got');
+    this.displayData.forEach(element => {
+        const filterOption = createOption(element);
+        filter.append(filterOption)
+    });
+}
+
+function createOption(value) {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = value;
+    return option;
+}
+const search = document.getElementById('search');
+search.addEventListener('click', () => {
+    this.copyOfData = this.initialData.filter((element) => element.family === got.value);
+    this.displaySearchResults(this.copyOfData)
+})
 function fetchResponse(url) {
     return new Promise((resolve, reject) => {
         const searchResponse = fetch(`${url}`);
@@ -31,15 +58,8 @@ function fetchResponse(url) {
     
 }
 
-function searchDetails() {
-    
-    
-    
-    
-}
-
 function displaySearchResults(data) {
-    debugger
+    row.innerHTML = ""
     data.forEach(element => {
         
         
